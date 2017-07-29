@@ -4,5 +4,5 @@
 public class JsonData {
     public String type;
     public Actor actor;
-
+    public Repo repo;
 }
