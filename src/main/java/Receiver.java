@@ -22,7 +22,6 @@ public class Receiver { //SubscribeToOpenChannel
             public void onSubscriptionData(SubscriptionData data) {
                 int cnt = 0;
                 for (AnyJson json : data.getMessages()) {
-
                     System.out.println(json.toString() + "\n" + cnt++ + "\n");
                 }
             }
