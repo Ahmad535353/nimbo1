@@ -15,6 +15,8 @@ public class Receiver { //SubscribeToOpenChannel
     static Deque<JsonData> jsonList = new LinkedList<JsonData>();
 
     public static void main(String[] args) throws InterruptedException {
+        Thread.currentThread().setPriority(5);
+
         final RtmClient client = new RtmClientBuilder(endpoint, appkey).setListener(new RtmClientAdapter() {
             @Override
             public void onEnterConnected(RtmClient client) {
@@ -22,14 +24,16 @@ public class Receiver { //SubscribeToOpenChannel
             }
         }).build();
 
+        Analyzer analyzer = new Analyzer();
+        analyzer.start();
+
         SubscriptionAdapter listener = new SubscriptionAdapter() {
             @Override
             public void onSubscriptionData(SubscriptionData data) {
-                int cnt = 0;
                 for (AnyJson json : data.getMessages()) {
-                    JsonData tmp = json.convertToType(JsonData.class);
-                    jsonList.addLast(tmp);
-                    System.out.println(json.toString() + "\n" + cnt++ + "\n");//
+                    jsonList.addLast(json.convertToType(JsonData.class));
+                    //System.out.println("hi buddy 1    " + jsonList.size() +  "\n");
+                    System.out.println(json.toString() + "\n");//
                 }
             }
         };
