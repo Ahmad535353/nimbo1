@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -14,24 +18,47 @@ public class Analyzer extends Thread {
     }
 
 
-    public void update(JsonData jsonData) {
+    public void update(JsonData jsonData) throws InterruptedException {
+
 
         Actor actor = jsonData.actor;
-        if (actors.containsKey(actor.id)) {
-            actor.cntr = actors.get(actor.id).cntr;
-            actors.remove(actor.id);
-        }
-        actor.cntr++;
-        actors.put(actor.id, actor);
+//        if (actors.containsKey(actor.id)) {
+//            actor.cntr = actors.get(actor.id).cntr;
+//            actors.remove(actor.id);
+//        }
+//        actor.cntr++;
+//        actors.put(actor.id, actor);
 
+
+        try(FileWriter fw = new FileWriter("PersonsMain" + (System.currentTimeMillis()/60000), true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(System.currentTimeMillis());
+            out.println(actor.id);
+            out.println(actor.login);
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
 
         Repo repo = jsonData.repo;
-        if (repos.containsKey(repo.id)) {
-            repo.cntr = repos.get(repo.id).cntr;
-            repos.remove(repo.id);
+//        if (repos.containsKey(repo.id)) {
+//            repo.cntr = repos.get(repo.id).cntr;
+//            repos.remove(repo.id);
+//        }
+//        repo.cntr++;
+//        repos.put(repo.id, repo);
+
+        try(FileWriter fw = new FileWriter("RepositoryMain.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(System.currentTimeMillis());
+            out.println(repo.id);
+            out.println(repo.name);
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
         }
-        repo.cntr++;
-        repos.put(repo.id, repo);
 
     }
 
@@ -46,7 +73,11 @@ public class Analyzer extends Thread {
                 }
             }
             while (!Receiver.jsonList.isEmpty()) {
-                update(Receiver.jsonList.getFirst());
+                try {
+                    update(Receiver.jsonList.getFirst());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Receiver.jsonList.removeFirst();
                 //   System.out.println("hi buddy 2   *" + Receiver.jsonList.size() + "\n");
             }

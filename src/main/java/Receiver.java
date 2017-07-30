@@ -26,14 +26,16 @@ public class Receiver { //SubscribeToOpenChannel
 
         Analyzer analyzer = new Analyzer();
         analyzer.start();
+        ReadAndAnalyze readAndAnalyze = new ReadAndAnalyze(100);
+        readAndAnalyze.start();
 
         SubscriptionAdapter listener = new SubscriptionAdapter() {
             @Override
             public void onSubscriptionData(SubscriptionData data) {
                 for (AnyJson json : data.getMessages()) {
                     jsonList.addLast(json.convertToType(JsonData.class));
-                    //System.out.println("hi buddy 1    " + jsonList.size() +  "\n");
-                    System.out.println(json.toString() + "\n");//
+//                    System.out.println("hi buddy 1    " + jsonList.size() +  "\n");
+//                    System.out.println(json.toString() + "\n");//
                 }
             }
         };
