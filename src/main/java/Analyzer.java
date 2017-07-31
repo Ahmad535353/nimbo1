@@ -15,7 +15,7 @@ public class Analyzer extends Thread {
 
     public Analyzer() {
         Thread.currentThread().setPriority(5);
-    }
+        }
 
 
     public void update(JsonData jsonData) throws InterruptedException {
