@@ -3,11 +3,9 @@
  */
 import com.satori.rtm.*;
 import com.satori.rtm.model.*;
-import org.omg.PortableInterceptor.ACTIVE;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.TreeSet;
 
 public class Receiver { //SubscribeToOpenChannel
     static final String endpoint = "wss://open-data.api.satori.com";
@@ -22,15 +20,14 @@ public class Receiver { //SubscribeToOpenChannel
         final RtmClient client = new RtmClientBuilder(endpoint, appkey).setListener(new RtmClientAdapter() {
             @Override
             public void onEnterConnected(RtmClient client) {
-//                System.out.println("Connected to Satori RTM!");
+                System.out.println("Connected to Satori RTM!");
             }
         }).build();
 
         Analyzer analyzer = new Analyzer();
         analyzer.start();
-
-        Input input = new Input();
-        input.start();
+        ReadAndAnalyze readAndAnalyze = new ReadAndAnalyze(100);
+        readAndAnalyze.start();
 
         SubscriptionAdapter listener = new SubscriptionAdapter() {
             @Override
@@ -46,20 +43,5 @@ public class Receiver { //SubscribeToOpenChannel
         client.createSubscription(channel, SubscriptionMode.SIMPLE, listener);
 
         client.start();
-
-
-//        TreeSet<Actor> actors = new TreeSet<Actor>();
-//        Actor actor = new Actor();
-//        Actor actor1 = new Actor();
-//        actor.cntr = 10;
-//        actor1.cntr = 25;
-//        actors.add(actor1);
-//        actors.add(actor);
-//        Actor temp = new Actor();
-//        temp = actors.last();
-//        System.out.println(actors.last().cntr);
-//        actors.remove(temp);
-//        System.out.println(actors.last().cntr);
-////        System.out.println(actors.first());
     }
 }

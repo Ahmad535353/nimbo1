@@ -3,29 +3,32 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
 
 public class ReadAndAnalyze extends Thread{
     private long upperTime;
     private long lowerTime;
-    private HashMap<Long, Actor> actors = new HashMap<Long, Actor>();
-    private HashMap<Long, Repo> repos = new HashMap<Long, Repo>();
-    private TreeSet <Actor> actorsTree = new TreeSet<Actor>();
-    private TreeSet <Repo> reposTree = new TreeSet<Repo>();
+    HashMap<Long, Actor> actors = new HashMap<Long, Actor>();
+    HashMap<Long, Repo> repos = new HashMap<Long, Repo>();
 
     public ReadAndAnalyze(int timeInSec) throws InterruptedException {
         Thread.currentThread().setPriority(5);
-        upperTime = System.currentTimeMillis();
-        lowerTime = System.currentTimeMillis() - (timeInSec * 1000);
+        timeInSec = 120;
+        lowerTime = System.currentTimeMillis();
+        upperTime = lowerTime + (timeInSec*1000);
 
     }
     @Override
     public void run() {
 
-        System.out.println("ReadAndAnalyze run!");
+        System.out.println("ReadAndAnalyze run! before sleep");
         long upperTimeInMinute = upperTime / 60000;
         System.out.println("Time : " + upperTimeInMinute);
+        try {
+            Thread.currentThread().sleep(150000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("ReadAndAnalyze run! after sleep");
 
         //read
         long buffTime = upperTime / 60000;
@@ -59,63 +62,9 @@ public class ReadAndAnalyze extends Thread{
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("time is invalid");
             }
-
-            //start new
-            try (BufferedReader br = new BufferedReader(new FileReader("RepositoriesMain" + buffTime))) {
-                String line;
-                while ((line = br.readLine()) != null){
-                    long savedTime = Long.valueOf(line);
-                    Repo repo = new Repo();
-                    if (savedTime < upperTime && savedTime > lowerTime)
-                    {
-                        String idS = br.readLine();
-                        repo.id = Long.valueOf(idS);
-                        repo.name = br.readLine();
-                        if (repos.containsKey(repo.id))
-                        {
-                            repo.cntr = repos.get(repo.id).cntr;
-                            repos.remove(repo.id);
-                        }
-                        repo.cntr++;
-                        repos.put(repo.id,repo);
-                    }
-                    else
-                    {
-                        br.readLine();
-                        br.readLine();
-                    }
-                }
-            } catch (IOException e) {
-                System.out.println("time is invalid");
-                e.printStackTrace();
-            }
-            //end new
             buffTime--;
             System.out.println("*************************************************************************");
-        }
-        this.analyze();
-    }
-    public void analyze()
-    {
-        System.out.println("Actors:");
-        for(Map.Entry<Long, Actor> en: actors.entrySet()) {
-            actorsTree.add(en.getValue());
-        }
-        while (!actorsTree.isEmpty()){
-            Actor temp = actorsTree.last();
-            System.out.println(String.format("%-50s %-10s %-10s",temp.login , temp.id , temp.cntr));
-            actorsTree.remove(temp);
-        }
-        System.out.println("\n Repositories:");
-        for(Map.Entry<Long, Repo> en: repos.entrySet()) {
-            reposTree.add(en.getValue());
-        }
-        while (!reposTree.isEmpty()){
-            Repo temp = reposTree.last();
-            System.out.println(String.format("%-50s %-10s %-10s",temp.name , temp.id , temp.cntr));
-            reposTree.remove(temp);
         }
     }
 }
