@@ -22,14 +22,6 @@ public class Analyzer extends Thread {
 
 
         Actor actor = jsonData.actor;
-//        if (actors.containsKey(actor.id)) {
-//            actor.cntr = actors.get(actor.id).cntr;
-//            actors.remove(actor.id);
-//        }
-//        actor.cntr++;
-//        actors.put(actor.id, actor);
-
-
         try(FileWriter fw = new FileWriter("PersonsMain" + (System.currentTimeMillis()/60000), true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
@@ -49,7 +41,7 @@ public class Analyzer extends Thread {
 //        repo.cntr++;
 //        repos.put(repo.id, repo);
 
-        try(FileWriter fw = new FileWriter("RepositoryMain.txt", true);
+        try(FileWriter fw = new FileWriter("RepositoriesMain" + (System.currentTimeMillis()/60000), true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
         {
