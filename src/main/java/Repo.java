@@ -3,10 +3,10 @@
  */
 public class Repo {
     public String name;
-    public long cntr = 0;
-    public long id;
+    public Long cntr = 0l;
+    public Long id;
 
     public Repo () {
-        cntr = 0;
+        cntr = 0l;
     }
 }
