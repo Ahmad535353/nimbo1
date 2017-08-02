@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
@@ -10,6 +11,11 @@ public class Client {
 
     public static void main (String[] args) throws InterruptedException {
         Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+        File dir = new File("data");
+        dir.mkdir();
+        dir = new File("result");
+        dir.mkdir();
+
         sem.acquire();
         numberOfRequests = 0;
 
@@ -35,6 +41,6 @@ public class Client {
             System.out.println("Now you can try another request or print 0!");
         }
 
-
+        System.exit(0);
     }
 }
